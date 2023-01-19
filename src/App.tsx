@@ -4,11 +4,15 @@ import { Counter } from './features/counter/Counter';
 import './App.css';
 import Order from './Order';
 
+import MainLayout from './MainLayout';
+
+
+
 function App() {
   return (
-    <div className="App">
-      <Order/>
-    </div>
+    <MainLayout/>
+
+
   );
 }
 

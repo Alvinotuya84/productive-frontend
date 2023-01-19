@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-    const response = await fetch('http://localhost:3001/orders ');
+    const response = await fetch('http://localhost:3001/api/orders ');
     const data = await response.json();
     return data;
 });
 
 export const createOrder = createAsyncThunk('orders/createOrder', async (order:any) => {
-    const response = await fetch('http://localhost:3001/orders', {
+    const response = await fetch('http://localhost:3001/api/orders', {
         method: 'POST',
         body: JSON.stringify(order),
         headers: { 'Content-Type': 'application/json' },
