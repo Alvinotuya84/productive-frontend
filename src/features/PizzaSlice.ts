@@ -1,0 +1,83 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+export const fetchOrders = createAsyncThunk('pizza/fetchOrders', async () => {
+  const { data } = await axios.get('/order');
+  return data;
+});
+
+export const addOrder = createAsyncThunk('pizza/addOrder', async (order) => {
+  const { data } = await axios.post('/order', order);
+  return data;
+});
+
+export const updateOrderStatus = createAsyncThunk('pizza/updateOrderStatus', async (orderId, status) => {
+  const { data } = await axios.patch(`/order/${orderId}`, { status });
+  return data;
+});
+
+const initialState = {
+  orders: [],
+  currentOrders: [],
+  finishedOrders: [],
+  status: 'idle',
+  error: null,
+};
+
+const pizzaSlice = createSlice({
+  name: 'pizza',
+  initialState,
+  reducers: {
+    moveOrderToCurrent: (state, action) => {
+      const { orderId } = action.payload;
+      const orderIndex = state.orders.findIndex(order => order.id === orderId);
+      const [order] = state.orders.splice(orderIndex, 1);
+      state.currentOrders.push(order);
+    },
+    moveOrderToFinished: (state, action) => {
+      const { orderId } = action.payload;
+      const currentOrderIndex = state.currentOrders.findIndex(order => order.id === orderId);
+      const [order] = state.currentOrders.splice(currentOrderIndex, 1);
+      state.finishedOrders.push(order);
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchOrders.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.orders = action.payload;
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(addOrder.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addOrder.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.orders.push(action.payload);
+      })
+      .addCase(addOrder.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const orderIndex = state.orders.findIndex(order => order.id === action.payload.id);
+        state.orders[orderIndex] = action.payload;
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  },
+});
+
+export default pizzaSlice.reducer;
