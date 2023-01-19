@@ -2,19 +2,19 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+ const baseUrl='http://localhost:30001 '
 export const fetchOrders = createAsyncThunk('pizza/fetchOrders', async () => {
-  const { data } = await axios.get('/order');
+  const { data } = await axios.get(`${baseUrl}/order`);
   return data;
 });
 
 export const addOrder = createAsyncThunk('pizza/addOrder', async (order) => {
-  const { data } = await axios.post('/order', order);
+  const { data } = await axios.post(`${baseUrl}/order`, order);
   return data;
 });
 
 export const updateOrderStatus = createAsyncThunk('pizza/updateOrderStatus', async (orderId, status) => {
-  const { data } = await axios.patch(`/order/${orderId}`, { status });
+  const { data } = await axios.patch(`${baseUrl}/order/${orderId}`, { status });
   return data;
 });
 
