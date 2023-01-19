@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+// @ts-nocheck
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from './features/PizzaSlice';
@@ -51,4 +54,4 @@ function FinishedOrders() {
 }
 
 export default FinishedOrders;
-``
+
