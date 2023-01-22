@@ -74,6 +74,9 @@ const pizzaSlice = createSlice({
         state.status = 'succeeded';
         toast.info(`Processing Order ID:${action.payload._id}`,{
           autoClose: 27000,
+          pauseOnFocusLoss: false,
+
+
         })
 
       })

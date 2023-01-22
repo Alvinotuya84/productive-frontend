@@ -32,13 +32,17 @@ useEffect(() => {
 
       toast.warning('New Order Detected! Wait for approximately 30 seconds for preparation you can view it under the Current Orders Tab!',{
         toastId:'new-order',
-        autoClose:7000
+        autoClose:7000,
+        pauseOnFocusLoss: false
+
       });
        filterOrdersCategory(orders)});
 socket.on('orderCompleted', (orders) => {
 
     toast.success('One Order has been Completed Check Under the Finished Orders Tab',{
-      toastId:'completed-order'
+      toastId:'completed-order',
+      pauseOnFocusLoss: false
+
     });
    filterOrdersCategory(orders)
   });
