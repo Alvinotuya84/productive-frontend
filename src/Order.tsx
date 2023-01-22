@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState,useMemo } from 'react';
+import React, { useState,useMemo,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addOrder } from './features/PizzaSlice';
 import Select from 'react-select'
@@ -20,9 +20,9 @@ import { toast } from 'react-toastify';
           }
           , [status])
         const animatedComponents = makeAnimated();
-        let toppings=[]
+        const toppings = useRef([])
         const filterToppings=(values)=>{
-            toppings= values.map(obj=>obj.value)
+            toppings.current= values.map(obj=>obj.value)
         }
 
         const options = [
@@ -52,13 +52,13 @@ import { toast } from 'react-toastify';
   <form onSubmit={(e)=>{
     e.preventDefault()
     setIsLoading(true)
-    if(toppings.length<1){
+    if(toppings.current.length<1){
         setIsLoading(false)
         toast.error("Please select atleast one topping")
     }else{
-        dispatch(addOrder({
-            toppings
-        }))
+         dispatch(addOrder({
+             toppings:toppings.current
+         }))
     }
 
   }} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

@@ -2,6 +2,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import Swal from 'sweetalert2'
 
 
@@ -63,6 +64,7 @@ const pizzaSlice = createSlice({
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.status = 'failed';
+        toast.error(action.error.message)
         state.error = action.error.message;
       })
       .addCase(addOrder.pending, (state) => {
@@ -70,10 +72,14 @@ const pizzaSlice = createSlice({
       })
       .addCase(addOrder.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        toast.info(`Processing Order ID:${action.payload._id}`,{
+          autoClose: 27000,
+        })
 
       })
       .addCase(addOrder.rejected, (state, action) => {
         state.status = 'failed';
+        toast.error(action.error.message)
         state.error = action.error.message;
       })
       .addCase(updateOrderStatus.pending, (state) => {
@@ -100,6 +106,7 @@ const pizzaSlice = createSlice({
       })
       .addCase(clearAllOrders.rejected, (state, action) => {
         state.status = 'failed';
+        toast.error(action.error.message)
         state.error = action.error.message;
       });
   },
