@@ -8,7 +8,7 @@ Make sure you cd into the project directory from your terminal or command prompt
 Make sure npm or yarn is installed in your machine
 
 In the project directory, you can run:
-### `npm install`
+### `npm install or yarn start`
 
 
 when package installation is complete type :
