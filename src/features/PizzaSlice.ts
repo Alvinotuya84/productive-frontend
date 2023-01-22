@@ -73,7 +73,7 @@ const pizzaSlice = createSlice({
       .addCase(addOrder.fulfilled, (state, action) => {
         state.status = 'succeeded';
         toast.info(`Processing Order ID:${action.payload._id}`,{
-          autoClose: 27000,
+          autoClose: 29000,
           pauseOnFocusLoss: false,
           pauseOnHover:false
 
