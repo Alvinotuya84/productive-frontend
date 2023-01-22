@@ -2,7 +2,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import {  toast } from 'react-toastify';
+import Swal from 'sweetalert2'
 
 
 
@@ -92,7 +92,11 @@ const pizzaSlice = createSlice({
       })
       .addCase(clearAllOrders.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        toast.success('All Orders Deleted Succesfully')
+        Swal.fire(
+          'Deleted!',
+          'All Orders Deleted Succesfully.',
+          'success'
+        )
       })
       .addCase(clearAllOrders.rejected, (state, action) => {
         state.status = 'failed';

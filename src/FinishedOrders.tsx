@@ -7,10 +7,13 @@ import { fetchOrders ,clearAllOrders} from './features/PizzaSlice';
 import io from 'socket.io-client';
 import {  toast } from 'react-toastify';
 import { format } from 'date-fns';
+import Swal from 'sweetalert2'
 
 
 
 function FinishedOrders() {
+
+
    const filterOrdersCategory = (orders) => {
     const filteredData = orders.filter(item => item.status === 'completed');
     setOrders(filteredData);
@@ -71,8 +74,22 @@ socket.on('orderCompleted', (orders) => {
   return (
     <div className="relative overflow-x-auto">
       <button onClick={()=>{
-        setIsLoading(true)
-        dispatch(clearAllOrders())
+
+        Swal.fire({
+  title: 'Are you sure?',
+  text: "You won't be able to revert this!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+    setIsLoading(true)
+    dispatch(clearAllOrders())
+  }
+})
+
       }} disabled={isLoading} type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">{isLoading?'loading...':'Clear All'}</button>
 
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
