@@ -23,7 +23,7 @@ export const updateOrderStatus = createAsyncThunk('pizza/updateOrderStatus', asy
   return data;
 });
 export const clearAllOrders = createAsyncThunk('pizza/clearOrders', async () => {
-  const { data } = await axios.delete(`${baseUrl}/order/clearOrders`);
+  const { data } = await axios.delete(`${baseUrl}/order`);
   return data;
 });
 

@@ -1,9 +1,9 @@
 
 // @ts-nocheck
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders } from './features/PizzaSlice';
+import { fetchOrders ,clearAllOrders} from './features/PizzaSlice';
 import io from 'socket.io-client';
 import {  toast } from 'react-toastify';
 import { format } from 'date-fns';
@@ -28,19 +28,19 @@ function FinishedOrders() {
   const socket = io('http://localhost:3001');
 
 
-  const toastId = useRef(null);
 
 useEffect(() => {
   socket.on('newOrder', (orders) => {
-    if(! toast.isActive(toastId.current)) {
-      toastId.current = toast.warning('There is new Order !');
-    }
+    toast.warning('There is new Order! Wait for approximately 30 seconds for preparation !',{
+      toastId:'new-order_current'
+
+    });
 
     filterOrdersCategory(orders)});
 socket.on('orderCompleted', (orders) => {
-  if(! toast.isActive(toastId.current)) {
-    toastId.current = toast.success('One Order has been Completed !');
-  }
+  toast.success('One Order has been Completed',{
+    toastId:'completed-order_current'
+  });
 
   filterOrdersCategory(orders)
   });
@@ -69,7 +69,10 @@ socket.on('orderCompleted', (orders) => {
 
   return (
     <div className="relative overflow-x-auto">
-      <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">{isLoading?'loading...':'Clear All'}</button>
+      <button onClick={()=>{
+        setIsLoading(true)
+        dispatch(clearAllOrders())
+      }} disabled={isLoading} type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">{isLoading?'loading...':'Clear All'}</button>
 
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

@@ -1,7 +1,7 @@
 
 // @ts-nocheck
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from './features/PizzaSlice';
 import io from 'socket.io-client';
@@ -24,18 +24,22 @@ function CurrentOrders() {
 
 
   const socket = io('http://localhost:3001');
-  const toastId = useRef(null);
 
 
 useEffect(() => {
   socket.on('newOrder', (orders) => {
-    if(! toast.isActive(toastId.current)) {
-      toastId.current = toast.warning('There is new Order !');
-    }    filterOrdersCategory(orders)});
+
+      toast.warning('There is new Order! Wait for approximately 30 seconds for preparation !',{
+        toastId:'new-order'
+
+      });
+       filterOrdersCategory(orders)});
 socket.on('orderCompleted', (orders) => {
-  if(! toast.isActive(toastId.current)) {
-    toastId.current = toast.success('One Order has been Completed !');
-  }  filterOrdersCategory(orders)
+
+    toast.success('One Order has been Completed',{
+      toastId:'completed-order'
+    });
+   filterOrdersCategory(orders)
   });
 }, []);
 
