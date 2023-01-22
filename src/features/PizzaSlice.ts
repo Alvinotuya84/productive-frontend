@@ -2,8 +2,13 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
- const baseUrl='http://localhost:30001 '
-export const fetchOrders = createAsyncThunk('pizza/fetchOrders', async () => {
+import {  toast } from 'react-toastify';
+
+
+
+
+ const baseUrl='http://localhost:3001/api'
+ export const fetchOrders = createAsyncThunk('pizza/fetchOrders', async () => {
   const { data } = await axios.get(`${baseUrl}/order`);
   return data;
 });
@@ -15,6 +20,10 @@ export const addOrder = createAsyncThunk('pizza/addOrder', async (order) => {
 
 export const updateOrderStatus = createAsyncThunk('pizza/updateOrderStatus', async (orderId, status) => {
   const { data } = await axios.patch(`${baseUrl}/order/${orderId}`, { status });
+  return data;
+});
+export const clearAllOrders = createAsyncThunk('pizza/clearOrders', async () => {
+  const { data } = await axios.delete(`${baseUrl}/order/clearOrders`);
   return data;
 });
 
@@ -61,7 +70,7 @@ const pizzaSlice = createSlice({
       })
       .addCase(addOrder.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.orders.push(action.payload);
+
       })
       .addCase(addOrder.rejected, (state, action) => {
         state.status = 'failed';
@@ -76,6 +85,16 @@ const pizzaSlice = createSlice({
         state.orders[orderIndex] = action.payload;
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      }).addCase(clearAllOrders.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(clearAllOrders.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        toast.success('All Orders Deleted Succesfully')
+      })
+      .addCase(clearAllOrders.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
       });
