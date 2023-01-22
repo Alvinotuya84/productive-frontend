@@ -31,7 +31,6 @@ useEffect(() => {
 
       toast.warning('There is new Order! Wait for approximately 30 seconds for preparation !',{
         toastId:'new-order'
-
       });
        filterOrdersCategory(orders)});
 socket.on('orderCompleted', (orders) => {
