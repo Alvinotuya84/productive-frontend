@@ -29,13 +29,14 @@ function CurrentOrders() {
 useEffect(() => {
   socket.on('newOrder', (orders) => {
 
-      toast.warning('There is new Order! Wait for approximately 30 seconds for preparation !',{
-        toastId:'new-order'
+      toast.warning('New Order Detected! Wait for approximately 30 seconds for preparation you can view it under the Current Orders Tab!',{
+        toastId:'new-order',
+        delay:1300
       });
        filterOrdersCategory(orders)});
 socket.on('orderCompleted', (orders) => {
 
-    toast.success('One Order has been Completed',{
+    toast.success('One Order has been Completed Check Under the Finished Orders Tab',{
       toastId:'completed-order'
     });
    filterOrdersCategory(orders)
