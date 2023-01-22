@@ -75,7 +75,7 @@ const pizzaSlice = createSlice({
         toast.info(`Processing Order ID:${action.payload._id}`,{
           autoClose: 27000,
           pauseOnFocusLoss: false,
-
+          pauseOnHover:false
 
         })
 
