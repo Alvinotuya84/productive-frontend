@@ -28,11 +28,17 @@ export const clearAllOrders = createAsyncThunk('pizza/clearOrders', async () => 
   return data;
 });
 
+export const deleteOrder = createAsyncThunk('pizza/deleteOrder', async (orderId) => {
+  const { data } = await axios.delete(`${baseUrl}/order/${orderId}`);
+  return data;
+});
+
 const initialState = {
   orders: [],
   currentOrders: [],
   finishedOrders: [],
   status: 'idle',
+  deletingStatus: 'idle',
   error: null,
 };
 
@@ -64,7 +70,7 @@ const pizzaSlice = createSlice({
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.status = 'failed';
-        toast.error(action.error.message)
+        toast.error(`${action.error.message} refresh the page and try again`)
         state.error = action.error.message;
       })
       .addCase(addOrder.pending, (state) => {
@@ -82,7 +88,7 @@ const pizzaSlice = createSlice({
       })
       .addCase(addOrder.rejected, (state, action) => {
         state.status = 'failed';
-        toast.error(action.error.message)
+        toast.error(`${action.error.message} refresh the page and try again`)
         state.error = action.error.message;
       })
       .addCase(updateOrderStatus.pending, (state) => {
@@ -109,9 +115,25 @@ const pizzaSlice = createSlice({
       })
       .addCase(clearAllOrders.rejected, (state, action) => {
         state.status = 'failed';
-        toast.error(action.error.message)
+        toast.error(`${action.error.message} refresh the page and try again`)
         state.error = action.error.message;
-      });
+      }).addCase(deleteOrder.pending, (state) => {
+        state.deletingStatus = 'loading';
+      })
+      .addCase(deleteOrder.fulfilled, (state, action) => {
+        state.deletingStatus = 'succeeded';
+        Swal.fire(
+          'Deleted!',
+          'Order Deleted Succesfully.',
+          'success'
+        )
+      })
+      .addCase(deleteOrder.rejected, (state, action) => {
+        state.deletingStatus = 'failed';
+        toast.error(`${action.error.message} refresh the page and try again`)
+        state.error = action.error.message;
+      })
+
   },
 });
 

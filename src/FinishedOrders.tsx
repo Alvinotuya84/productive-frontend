@@ -3,7 +3,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrders ,clearAllOrders} from './features/PizzaSlice';
+import { fetchOrders ,clearAllOrders, deleteOrder} from './features/PizzaSlice';
 import io from 'socket.io-client';
 import {  toast } from 'react-toastify';
 import { format } from 'date-fns';
@@ -19,10 +19,13 @@ function FinishedOrders() {
     setOrders(filteredData);
   }
 
-  const currentOrders = useSelector((state:any) => state.pizza.orders);
-  const status = useSelector((state:any) => state.pizza.status);
+  const {orders,deletingStatus,status} = useSelector((state:any) => state.pizza);
+
+
     const [isLoading, setIsLoading] = useState(true);
-  const [orders,setOrders]=useState([] )
+  const [allOrders,setOrders]=useState([] )
+  const [orderID,setOrderID]=useState('')
+
 
   const dispatch=useDispatch()
 
@@ -43,15 +46,17 @@ useEffect(() => {
     });
 
     filterOrdersCategory(orders)});
-socket.on('orderCompleted', (orders) => {
-  toast.success('One Order has been Completed Check Under the Finished Orders Tab',{
-    toastId:'completed-order',
+socket.on('orderCompleted', (orders,orderId) => {
+  toast.success(`Order of Order ID ${orderId} Completed Check Finished Orders Tab`,{
+    toastId:orderId,
     pauseOnFocusLoss: false
 
   });
 
   filterOrdersCategory(orders)
   });
+  socket.on('orderDeleted', (orders) => {
+    filterOrdersCategory(orders)});
   socket.on('allOrdersDeleted', (orders) => {
   filterOrdersCategory(orders)
   });
@@ -65,7 +70,7 @@ socket.on('orderCompleted', (orders) => {
 
 
   useMemo(() => {
-    filterOrdersCategory(currentOrders)
+    filterOrdersCategory(orders)
     if(status == 'succeeded' || status == 'failed'){
         setIsLoading(false)
     }
@@ -80,7 +85,7 @@ socket.on('orderCompleted', (orders) => {
       <button onClick={()=>{
 
         Swal.fire({
-  title: 'Are you sure?',
+  title: 'Are you sure you want to delete all orders?',
   text: "You won't be able to revert this!",
   icon: 'warning',
   showCancelButton: true,
@@ -107,10 +112,11 @@ socket.on('orderCompleted', (orders) => {
             <th scope="col" className="px-6 py-3">Walk time</th>
             <th scope="col" className="px-6 py-3">Completed Time</th>
             <th scope="col" className="px-6 py-3">Ip Address</th>
+            <th scope="col" className="px-6 py-3">Action</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((order:any,index:number) => (
+          {allOrders.map((order:any,index:number) => (
             <tr key={index}>
               <td className="px-6 py-4">{order._id}</td>
               <td className="px-6 py-4">{order.toppings.join(', ')}</td>
@@ -123,6 +129,31 @@ socket.on('orderCompleted', (orders) => {
           </td>
             <td>
             {order.ipaddress}
+          </td>
+          <td>
+          <button onClick={()=>{
+
+Swal.fire({
+title: 'Are you sure you want to delete this order?',
+text: "You won't be able to revert this!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+if (result.isConfirmed) {
+  setOrderID(order._id)
+dispatch(deleteOrder(order._id))
+}
+})
+
+}} disabled={deletingStatus==='loading' && orderID==order._id} type="button" className="text-white
+bg-gradient-to-r from-gray-400 gray-pink-500
+ to-gray-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-gray-300
+  dark:focus:ring-gray-800 shadow-lg shadow-gray-500/50 dark:shadow-lg
+   dark:shadow-gray-800/80 font-medium rounded-lg text-sm px-5
+    py-2.5 text-center mr-2 mb-2">{deletingStatus==='loading' && orderID==order._id?'loading...':'Delete'}</button>
           </td>
             </tr>
           ))}

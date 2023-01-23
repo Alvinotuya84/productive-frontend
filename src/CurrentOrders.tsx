@@ -38,16 +38,15 @@ useEffect(() => {
 
       });
        filterOrdersCategory(orders)});
-socket.on('orderCompleted', (orders) => {
+       socket.on('orderCompleted', (orders,orderId) => {
+        toast.success(`Order of Order ID ${orderId} Completed Check Finished Orders Tab`,{
+          toastId:orderId,
+          pauseOnFocusLoss: false
 
-    toast.success('One Order has been Completed Check Under the Finished Orders Tab',{
-      toastId:'completed-order',
-      pauseOnFocusLoss: false,
-      pauseOnHover:false
+        });
 
-    });
-   filterOrdersCategory(orders)
-  });
+        filterOrdersCategory(orders)
+        });
 }, []);
 
   useEffect(() => {
@@ -69,7 +68,6 @@ socket.on('orderCompleted', (orders) => {
 
   return (
     <div className="relative overflow-x-auto">
-      <h2>Current Orders</h2>
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
