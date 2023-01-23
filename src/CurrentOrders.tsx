@@ -76,6 +76,7 @@ socket.on('orderCompleted', (orders) => {
             <th scope="col" className="px-6 py-3">Order ID</th>
             <th scope="col" className="px-6 py-3">Toppings</th>
             <th scope="col" className="px-6 py-3">Status</th>
+            <th scope="col" className="px-6 py-3">Ip Address</th>
           </tr>
         </thead>
         <tbody>
@@ -106,6 +107,9 @@ socket.on('orderCompleted', (orders) => {
         text-sm px-5 py-2.5 text-center mr-2 mb-2">Pending</button>
 
       }
+          </td>
+          <td>
+            {order.ipaddress}
           </td>
             </tr>
           ))}

@@ -106,6 +106,7 @@ socket.on('orderCompleted', (orders) => {
             <th scope="col" className="px-6 py-3">Oven Time</th>
             <th scope="col" className="px-6 py-3">Walk time</th>
             <th scope="col" className="px-6 py-3">Completed Time</th>
+            <th scope="col" className="px-6 py-3">Ip Address</th>
           </tr>
         </thead>
         <tbody>
@@ -119,6 +120,9 @@ socket.on('orderCompleted', (orders) => {
               <td className="px-6 py-4">{order.walkTime}</td>
               <td className="px-6 py-4">
                 {format(new Date(order.timeCompleted), "hh:mm:ss aa")}
+          </td>
+            <td>
+            {order.ipaddress}
           </td>
             </tr>
           ))}
