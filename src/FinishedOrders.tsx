@@ -45,10 +45,11 @@ function FinishedOrders() {
     doc.setFontSize(17);
 
     const title = "Orders Report";
-    const headers = [["ORDER ID", "TOPPINGS","DOUGH TIME","TOPPING TIME","OVEN TIME","WALK TIME","COMPLETED TIME"]];
+    const headers = [["ORDER ID", "TOPPINGS","DOUGH TIME","TOPPING TIME","OVEN TIME","WALK TIME","START TIME","COMPLETED TIME"]];
 
     const data = allOrders.map(elt=> [elt._id, elt.toppings.join(', '),
     elt.doughPrepTime,elt.toppingPrepTime,elt.ovenPrepTime,elt.walkTime,
+    format(new Date(elt.timeStarted), "hh:mm:ss aa"),
     format(new Date(elt.timeCompleted), "hh:mm:ss aa")
   ]);
 
@@ -68,7 +69,7 @@ function FinishedOrders() {
 
 useEffect(() => {
   socket.on('newOrder', (orders) => {
-    toast.warning('New Order Detected! Wait for approximately 30 seconds for preparation you can view it under the Current Orders Tab!',{
+    toast.warning('New Order Detected! Wait for its preparation you can view it under the Current Orders Tab!',{
       toastId:'new-order',
       autoClose:7000,
       pauseOnFocusLoss: false

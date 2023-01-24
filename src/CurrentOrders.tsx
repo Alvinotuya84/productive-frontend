@@ -30,7 +30,7 @@ function CurrentOrders() {
 useEffect(() => {
   socket.on('newOrder', (orders) => {
 
-      toast.warning('New Order Detected! Wait for approximately 30 seconds for preparation you can view it under the Current Orders Tab!',{
+      toast.warning('New Order Detected! Wait for its preparation you can view it under the Current Orders Tab!',{
         toastId:'new-order',
         autoClose:7000,
         pauseOnFocusLoss: false,
