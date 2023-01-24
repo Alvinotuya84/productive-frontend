@@ -159,6 +159,7 @@ bg-gradient-to-r from-green-400 gray-pink-500
             <th scope="col" className="px-6 py-3">Topping Time</th>
             <th scope="col" className="px-6 py-3">Oven Time</th>
             <th scope="col" className="px-6 py-3">Walk time</th>
+            <th scope="col" className="px-6 py-3">Start Time</th>
             <th scope="col" className="px-6 py-3">Completed Time</th>
             <th scope="col" className="px-6 py-3">Ip Address</th>
             <th scope="col" className="px-6 py-3">Action</th>
@@ -173,6 +174,9 @@ bg-gradient-to-r from-green-400 gray-pink-500
               <td className="px-6 py-4">{order.toppingPrepTime}</td>
               <td className="px-6 py-4">{order.ovenPrepTime}</td>
               <td className="px-6 py-4">{order.walkTime}</td>
+              <td className="px-6 py-4">
+                {format(new Date(order.timeStarted), "hh:mm:ss aa")}
+          </td>
               <td className="px-6 py-4">
                 {format(new Date(order.timeCompleted), "hh:mm:ss aa")}
           </td>
