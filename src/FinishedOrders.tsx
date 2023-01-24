@@ -91,6 +91,7 @@ socket.on('orderCompleted', (orders,orderId) => {
     filterOrdersCategory(orders)});
   socket.on('allOrdersDeleted', (orders) => {
   filterOrdersCategory(orders)
+  setOrders([])
   });
 
 }, []);
